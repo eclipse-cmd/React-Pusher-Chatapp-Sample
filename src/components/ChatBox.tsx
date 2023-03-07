@@ -1,14 +1,13 @@
-import React, { useEffect, useRef, useState } from "react";
-import Pusher from "pusher-js";
+import { _BASE_API_URL, _PUSHER_KEY } from "@/constant";
 import axios from "axios";
-import { _BASE_API_URL } from "@/constant";
+import Pusher from "pusher-js";
+import React, { useEffect, useRef, useState } from "react";
 
 interface ChatBoxProps {}
 
 export const ChatBox: React.FC<ChatBoxProps> = ({}) => {
   const inputFieldClear = useRef<HTMLInputElement>(null);
   const [inputField, setInputField] = useState({ message: "" });
-  const [isLoading, setIsLoading] = useState(false);
 
   //methods
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
@@ -39,14 +38,14 @@ export const ChatBox: React.FC<ChatBoxProps> = ({}) => {
   useEffect(() => {
     Pusher.logToConsole = true;
 
-    const pusher = new Pusher("", {
+    const pusher = new Pusher(_PUSHER_KEY as string, {
       cluster: "eu",
     });
 
     const channel = pusher.subscribe("my-channel");
 
     channel.bind("my-event", function (data: any) {
-      console.log("Pusher Data: ", JSON.stringify(data))
+      console.log("Pusher Data: ", JSON.stringify(data));
     });
   }, []);
 
